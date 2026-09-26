@@ -2,7 +2,7 @@
 
 Plataforma web de subastas de vehículos tipo Copart, creada para el segundo parcial. Permite explorar un inventario público, registrarse, publicar vehículos con galería y participar en pujas en tiempo real.
 
-> **Enlace publicado:** agrega aquí tu URL de Firebase Hosting al terminar el despliegue. Ejemplo: `https://subastamotor-hugo.web.app`
+> **Sitio publicado:** [https://subastamotor-hugo.web.app](https://subastamotor-hugo.web.app)
 
 ## Funcionalidades
 
