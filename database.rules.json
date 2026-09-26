@@ -1,0 +1,50 @@
+{
+  "rules": {
+    "auctions": {
+      ".read": true,
+      "$auctionId": {
+        ".write": "auth != null && newData.exists() && ((!data.exists() && newData.child('ownerUid').val() === auth.uid && newData.child('startsAtMs').val() > now) || (data.exists() && data.child('ownerUid').val() === auth.uid && now < data.child('startsAtMs').val()))",
+        ".validate": "newData.hasChildren(['ownerUid', 'title', 'year', 'articleType', 'brand', 'model', 'engine', 'transmission', 'fuel', 'drivetrain', 'cylinders', 'damage', 'photos', 'basePrice', 'startsAt', 'endsAt', 'startsAtMs', 'endsAtMs', 'status']) && newData.child('title').isString() && newData.child('year').isNumber() && newData.child('basePrice').isNumber() && newData.child('basePrice').val() > 0 && newData.child('startsAt').isString() && newData.child('endsAt').isString() && newData.child('startsAtMs').isNumber() && newData.child('endsAtMs').isNumber() && newData.child('endsAtMs').val() > newData.child('startsAtMs').val() && newData.child('status').val() === 'ACTIVE'",
+        "ownerUid": {
+          ".validate": "newData.isString() && (!data.exists() ? newData.val() === auth.uid : newData.val() === data.val())"
+        },
+        "articleType": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "brand": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "model": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "engine": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "transmission": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "fuel": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "drivetrain": { ".validate": "newData.val() === 'FWD' || newData.val() === 'RWD' || newData.val() === 'AWD' || newData.val() === '4WD'" },
+        "cylinders": { ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 16" },
+        "damage": { ".validate": "newData.val() === 'Verde' || newData.val() === 'Amarillo' || newData.val() === 'Rojo'" },
+        "photos": {
+          ".validate": "newData.hasChildren() && newData.numChildren() >= 5 && newData.numChildren() <= 8",
+          "$index": { ".validate": "newData.isString() && newData.val().matches(/^data:image\\/jpeg;base64,/)" }
+        }
+      }
+    },
+    "auctionStates": {
+      ".read": true,
+      "$auctionId": {
+        ".write": "auth != null && root.child('auctions').child($auctionId).exists() && ((!data.exists() && root.child('auctions').child($auctionId).child('ownerUid').val() === auth.uid && now < root.child('auctions').child($auctionId).child('startsAtMs').val() && newData.child('currentBid').val() === 0 && newData.child('bidCount').val() === 0) || (data.exists() && root.child('auctions').child($auctionId).child('status').val() === 'ACTIVE' && now >= root.child('auctions').child($auctionId).child('startsAtMs').val() && now < root.child('auctions').child($auctionId).child('endsAtMs').val() && newData.child('currentBid').isNumber() && newData.child('currentBid').val() >= (data.child('currentBid').val() > 0 ? data.child('currentBid').val() * 1.1 : root.child('auctions').child($auctionId).child('basePrice').val()) && newData.child('bidCount').val() === data.child('bidCount').val() + 1))",
+        ".validate": "newData.hasChildren(['currentBid', 'bidCount']) && newData.child('currentBid').isNumber() && newData.child('currentBid').val() >= 0 && newData.child('bidCount').isNumber() && newData.child('bidCount').val() >= 0"
+      }
+    },
+    "myBids": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        "$auctionId": {
+          ".write": "auth != null && auth.uid === $uid && newData.exists()",
+          ".validate": "newData.hasChildren(['amount', 'updatedAt']) && newData.child('amount').isNumber() && newData.child('amount').val() > 0 && newData.child('updatedAt').isNumber()"
+        }
+      }
+    },
+    "profiles": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChildren(['name', 'email', 'phone']) && newData.child('name').isString() && newData.child('email').isString() && newData.child('phone').isString()"
+      }
+    }
+  }
+}
