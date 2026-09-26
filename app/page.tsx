@@ -74,7 +74,11 @@ export default function Home() {
     setSelectedId(demo[0]?.id ?? null);
     if (!firebaseEnabled) return;
     return streamPublicAuctions(
-      (liveVehicles) => { setVehicles(liveVehicles); setSelectedId((current) => current ?? liveVehicles[0]?.id ?? null); },
+      (liveVehicles) => {
+        if (liveVehicles.length === 0) return;
+        setVehicles(liveVehicles);
+        setSelectedId((current) => liveVehicles.some((vehicle) => vehicle.id === current) ? current : liveVehicles[0]?.id ?? null);
+      },
       () => setNotice({ tone: "error", text: "No se pudo sincronizar Firebase. Se mantiene la última información disponible." }),
     );
   }, []);

@@ -54,8 +54,8 @@ firebase deploy --only database,hosting
 
 ## Pruebas de entrega
 
-1. Crea las tres cuentas de prueba descritas abajo.
-2. Publica un vehículo con al menos cinco fotografías desde la cuenta Vendedor.
+1. Inicia sesión con las tres cuentas de prueba descritas abajo, ya creadas en Firebase.
+2. Revisa las seis subastas activas iniciales y publica un vehículo con al menos cinco fotografías desde la cuenta Vendedor.
 3. Abre la URL en dos o tres navegadores o ventanas privadas.
 4. Inicia sesión con Comprador 1 y Comprador 2 y realiza ofertas alternadas.
 5. Comprueba que monto, contador y estado cambian sin F5.
