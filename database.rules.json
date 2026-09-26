@@ -18,8 +18,8 @@
         "cylinders": { ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 16" },
         "damage": { ".validate": "newData.val() === 'Verde' || newData.val() === 'Amarillo' || newData.val() === 'Rojo'" },
         "photos": {
-          ".validate": "newData.hasChildren() && newData.numChildren() >= 5 && newData.numChildren() <= 8",
-          "$index": { ".validate": "newData.isString() && newData.val().matches(/^data:image\\/jpeg;base64,/)" }
+          ".validate": "newData.hasChildren(['0', '1', '2', '3', '4'])",
+          "$index": { ".validate": "($index === '0' || $index === '1' || $index === '2' || $index === '3' || $index === '4' || $index === '5' || $index === '6' || $index === '7') && newData.isString() && newData.val().matches(/^data:image\\/jpeg;base64,/)" }
         }
       }
     },
